@@ -333,6 +333,12 @@ func qemuTerraformVars(
 		}
 	}
 
+	// prepare boot mode according to attestation variant
+	bootMode := "uefi"
+	if conf.Attestation.QEMUTDX != nil {
+		bootMode = "direct-linux-boot"
+	}
+
 	metadataLibvirtURI := libvirtURI
 	if libvirtSocketPath != "." {
 		metadataLibvirtURI = "qemu:///system"
@@ -353,27 +359,50 @@ func qemuTerraformVars(
 			MemorySize:   conf.Provider.QEMU.Memory,
 		}
 	}
-	return &terraform.QEMUVariables{
-		Name:              conf.Name,
-		LibvirtURI:        libvirtURI,
-		LibvirtSocketPath: libvirtSocketPath,
-		// TODO(malt3): auto select boot mode based on attestation variant.
-		// requires image info v2.
-		BootMode:           "uefi",
-		ImagePath:          imagePath,
-		ImageFormat:        conf.Provider.QEMU.ImageFormat,
-		NodeGroups:         nodeGroups,
-		Machine:            "q35", // TODO(elchead): make configurable AB#3225
-		MetadataAPIImage:   conf.Provider.QEMU.MetadataAPIImage,
-		MetadataLibvirtURI: metadataLibvirtURI,
-		NVRAM:              conf.Provider.QEMU.NVRAM,
-		Firmware:           firmware,
-		// TODO(malt3) enable once we have a way to auto-select values for these
-		// requires image info v2.
-		// BzImagePath:        placeholder,
-		// InitrdPath:         placeholder,
-		// KernelCmdline:      placeholder,
-	}, nil
+
+	variables := terraform.QEMUVariables{}
+	if conf.Attestation.QEMUTDX != nil {
+		kernelPath := "/home/ry/constell-dir/constellation/build/constellation.vmlinuz"
+		initrdPath := "/home/ry/constell-dir/constellation/build/constellation.initrd"
+		//kernelCmdline := "ima_hash=sha384 ima_policy=critical_data"
+		firmware := "/usr/share/qemu/OVMF.fd"
+		variables = terraform.QEMUVariables{
+			Name:               conf.Name,
+			LibvirtURI:         libvirtURI,
+			LibvirtSocketPath:  libvirtSocketPath,
+			BootMode:           bootMode,
+			ImagePath:          imagePath,
+			ImageFormat:        conf.Provider.QEMU.ImageFormat,
+			NodeGroups:         nodeGroups,
+			Machine:            "q35", // TODO(elchead): make configurable AB#3225
+			MetadataAPIImage:   conf.Provider.QEMU.MetadataAPIImage,
+			MetadataLibvirtURI: metadataLibvirtURI,
+			NVRAM:              conf.Provider.QEMU.NVRAM,
+			Firmware:           &firmware,
+			// TODO(malt3) enable once we have a way to auto-select values for these
+			// requires image info v2.
+			BzImagePath:   &kernelPath,
+			InitrdPath:    &initrdPath,
+			//KernelCmdline: &kernelCmdline,
+		}
+	} else {
+		variables = terraform.QEMUVariables{
+			Name:               conf.Name,
+			LibvirtURI:         libvirtURI,
+			LibvirtSocketPath:  libvirtSocketPath,
+			BootMode:           bootMode,
+			ImagePath:          imagePath,
+			ImageFormat:        conf.Provider.QEMU.ImageFormat,
+			NodeGroups:         nodeGroups,
+			Machine:            "q35", // TODO(elchead): make configurable AB#3225
+			MetadataAPIImage:   conf.Provider.QEMU.MetadataAPIImage,
+			MetadataLibvirtURI: metadataLibvirtURI,
+			NVRAM:              conf.Provider.QEMU.NVRAM,
+			Firmware:           firmware,
+		}
+	}
+
+	return &variables, nil
 }
 
 func toPtr[T any](v T) *T {

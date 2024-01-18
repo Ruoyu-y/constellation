@@ -1,7 +1,8 @@
 [updates]
 name=Fedora $releasever - $basearch - Updates
 #baseurl=http://download.example/pub/fedora/linux/updates/$releasever/Everything/$basearch/
-metalink=https://mirrors.fedoraproject.org/metalink?repo=updates-released-f$releasever&arch=$basearch
+#metalink=https://mirrors.fedoraproject.org/metalink?repo=updates-released-f$releasever&arch=$basearch
+metalink=https://mirror.nju.edu.cn/metalink?repo=updates-released-f$releasever&arch=$basearch
 enabled=1
 countme=1
 repo_gpgcheck=0
@@ -14,7 +15,8 @@ skip_if_unavailable=False
 [updates-debuginfo]
 name=Fedora $releasever - $basearch - Updates - Debug
 #baseurl=http://download.example/pub/fedora/linux/updates/$releasever/Everything/$basearch/debug/
-metalink=https://mirrors.fedoraproject.org/metalink?repo=updates-released-debug-f$releasever&arch=$basearch
+#metalink=https://mirrors.fedoraproject.org/metalink?repo=updates-released-debug-f$releasever&arch=$basearch
+metalink=https://mirror.nju.edu.cn/metalink?repo=updates-released-debug-f$releasever&arch=$basearch
 enabled=0
 repo_gpgcheck=0
 type=rpm
@@ -26,7 +28,8 @@ skip_if_unavailable=False
 [updates-source]
 name=Fedora $releasever - Updates Source
 #baseurl=http://download.example/pub/fedora/linux/updates/$releasever/Everything/SRPMS/
-metalink=https://mirrors.fedoraproject.org/metalink?repo=updates-released-source-f$releasever&arch=$basearch
+#metalink=https://mirrors.fedoraproject.org/metalink?repo=updates-released-source-f$releasever&arch=$basearch
+metalink=https://mirror.nju.edu.cn/metalink?repo=updates-released-source-f$releasever&arch=$basearch
 enabled=0
 repo_gpgcheck=0
 type=rpm

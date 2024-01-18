@@ -56,11 +56,11 @@ output "validate_constellation_initrd" {
   description = "Validation placeholder. Do not consume as output."
 }
 
-output "validate_constellation_cmdline" {
-  value = null
-  precondition {
-    condition     = var.constellation_boot_mode != "direct-linux-boot" || length(var.constellation_cmdline) > 0
-    error_message = "constellation_cmdline must be set if constellation_boot_mode is 'direct-linux-boot'"
-  }
-  description = "Validation placeholder. Do not consume as output."
-}
+#output "validate_constellation_cmdline" {
+#  value = null
+#  precondition {
+#    condition     = var.constellation_boot_mode != "direct-linux-boot" || length(var.constellation_cmdline) > 0
+#    error_message = "constellation_cmdline must be set if constellation_boot_mode is 'direct-linux-boot'"
+#  }
+#  description = "Validation placeholder. Do not consume as output."
+#}

@@ -208,6 +208,9 @@ func validateAttestation(sl validator.StructLevel) {
 	if attestation.QEMUVTPM != nil {
 		attestationCount++
 	}
+	if attestation.QEMUTDX != nil {
+		attestationCount++
+	}
 
 	if attestationCount < 1 {
 		sl.ReportError(attestation, "Attestation", "Attestation", "no_attestation", "")
@@ -250,7 +253,7 @@ func translateNoAttestationError(ut ut.Translator, fe validator.FieldError) stri
 }
 
 func registerNoAttestationError(ut ut.Translator) error {
-	return ut.Add("no_attestation", "{0}: No attestation has been defined (requires either awsSEVSNP, awsNitroTPM, azureSEVSNP, azureTDX, azureTrustedLaunch, gcpSEVES, or qemuVTPM)", true)
+	return ut.Add("no_attestation", "{0}: No attestation has been defined (requires either awsSEVSNP, awsNitroTPM, azureSEVSNP, azureTDX, azureTrustedLaunch, gcpSEVES, qemuVTPM or qemuTDX)", true)
 }
 
 func translateNoDefaultControlPlaneGroupError(ut ut.Translator, fe validator.FieldError) string {
@@ -372,6 +375,9 @@ func (c *Config) translateMoreThanOneAttestationError(ut ut.Translator, fe valid
 	}
 	if c.Attestation.QEMUVTPM != nil {
 		definedAttestations = append(definedAttestations, "QEMUVTPM")
+	}
+	if c.Attestation.QEMUTDX != nil {
+		definedAttestations = append(definedAttestations, "QEMUTDX")
 	}
 
 	t, _ := ut.T("more_than_one_attestation", fe.Field(), strings.Join(definedAttestations, ", "))

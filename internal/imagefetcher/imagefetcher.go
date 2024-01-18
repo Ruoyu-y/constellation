@@ -183,6 +183,10 @@ func getReferenceFromImageInfo(provider cloudprovider.Provider,
 variantLoop:
 	for _, variant := range imgInfo.List {
 		gotCSP := cloudprovider.FromString(variant.CSP)
+		// Hack for TDX, need to remove the lines after qemu-tdx image info has been uploaded into CDN repo
+		if attestationVariant == "qemu-tdx" {
+			attestationVariant = "qemu-vtpm"
+		}
 		if gotCSP != provider || variant.AttestationVariant != attestationVariant {
 			continue
 		}

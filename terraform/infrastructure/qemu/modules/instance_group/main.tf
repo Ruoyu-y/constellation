@@ -36,10 +36,10 @@ resource "libvirt_domain" "instance_group" {
   kernel  = local.kernel
   initrd  = local.initrd
   cmdline = local.cmdline
-  tpm {
-    backend_type    = "emulator"
-    backend_version = "2.0"
-  }
+  //tpm {
+  //  backend_type    = "emulator"
+  //  backend_version = "2.0"
+  //}
   disk {
     volume_id = element(libvirt_volume.boot_volume.*.id, count.index)
   }
@@ -91,9 +91,12 @@ locals {
   group_uid            = random_id.uid.hex
   state_disk_size_byte = 1073741824 * var.state_disk_size
   ip_range_start       = 100
-  kernel               = var.boot_mode == "direct-linux-boot" ? var.kernel_volume_id : null
-  initrd               = var.boot_mode == "direct-linux-boot" ? var.initrd_volume_id : null
+  kernel               = null
+  initrd               = null
+  //kernel               = var.boot_mode == "direct-linux-boot" ? var.kernel_volume_id : null
+  //initrd               = var.boot_mode == "direct-linux-boot" ? var.initrd_volume_id : null
   cmdline              = var.boot_mode == "direct-linux-boot" ? [{ "_" = var.kernel_cmdline }] : null
-  firmware             = var.boot_mode == "uefi" ? var.firmware : null
+  //firmware             = var.boot_mode == "uefi" ? var.firmware : null
+  firmware             = var.firmware
   xslt_filename        = var.boot_mode == "direct-linux-boot" ? "tdx_domain.xsl" : "domain.xsl"
 }

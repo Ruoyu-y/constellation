@@ -33,6 +33,10 @@ VARIANTS = [
         "attestation_variant": "qemu-vtpm",
         "csp": "qemu",
     },
+    {
+        "attestation_variant": "qemu-tdx",
+        "csp": "qemu",
+    },
 ]
 
 STREAMS = [
@@ -130,6 +134,11 @@ attestation_variant_settings = {
     "qemu-vtpm": {
         "kernel_command_line_dict": {
             "constel.attestation-variant": "qemu-vtpm",
+        },
+    },
+    "qemu-tdx": {
+        "kernel_command_line_dict": {
+            "constel.attestation-variant": "qemu-tdx",
         },
     },
 }
