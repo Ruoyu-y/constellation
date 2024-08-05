@@ -333,6 +333,12 @@ func qemuTerraformVars(
 		}
 	}
 
+	// prepare boot mode according to attestation variant
+	bootMode := "uefi"
+	if conf.Attestation.QEMUTDX != nil {
+		bootMode = "direct-linux-boot"
+	}
+
 	metadataLibvirtURI := libvirtURI
 	if libvirtSocketPath != "." {
 		metadataLibvirtURI = "qemu:///system"

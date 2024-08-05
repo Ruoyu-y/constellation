@@ -36,10 +36,10 @@ resource "libvirt_domain" "instance_group" {
   kernel  = local.kernel
   initrd  = local.initrd
   cmdline = local.cmdline
-  tpm {
-    backend_type    = "emulator"
-    backend_version = "2.0"
-  }
+  //tpm {
+  //  backend_type    = "emulator"
+  //  backend_version = "2.0"
+  //}
   disk {
     volume_id = element(libvirt_volume.boot_volume.*.id, count.index)
   }

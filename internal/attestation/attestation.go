@@ -30,7 +30,7 @@ package attestation
 
 import (
 	"bytes"
-	"crypto/sha256"
+	"crypto/sha512"
 
 	"github.com/edgelesssys/constellation/v2/internal/crypto"
 )
@@ -65,9 +65,9 @@ func DeriveClusterID(secret, salt []byte) ([]byte, error) {
 
 // MakeExtraData binds userData to a random nonce used in attestation.
 func MakeExtraData(userData []byte, nonce []byte) []byte {
-	data := append([]byte{}, userData...)
-	data = append(data, nonce...)
-	digest := sha256.Sum256(data)
+	data := append([]byte{}, nonce...)
+	data = append(data, userData...)
+	digest := sha512.Sum512(data)
 	return digest[:]
 }
 

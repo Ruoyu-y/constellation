@@ -11,9 +11,9 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/Ruoyu-y/go-tdx-qpl/tdx"
 	"github.com/edgelesssys/constellation/v2/internal/attestation"
 	"github.com/edgelesssys/constellation/v2/internal/attestation/variant"
-	"github.com/edgelesssys/go-tdx-qpl/tdx"
 )
 
 // Issuer is the TDX attestation issuer.
@@ -50,7 +50,7 @@ func (i *Issuer) Issue(_ context.Context, userData []byte, nonce []byte) (attDoc
 	}
 	defer handle.Close()
 
-	quote, err := tdx.GenerateQuote(handle, attestation.MakeExtraData(userData, nonce))
+	quote, err := tdx.GenerateQuote(handle, userData, nonce)
 	if err != nil {
 		return nil, fmt.Errorf("generating quote: %w", err)
 	}

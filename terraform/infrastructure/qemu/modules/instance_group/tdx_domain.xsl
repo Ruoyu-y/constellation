@@ -41,13 +41,6 @@
                     <xsl:value-of select="'no'"/>
                 </xsl:attribute>
             </xsl:element>
-            <xsl:element name ="launchSecurity">
-                <xsl:attribute name="type">
-                    <xsl:value-of select="'tdx'"/>
-                </xsl:attribute>
-                <xsl:element name ="policy"><xsl:text>0x10000001</xsl:text></xsl:element>
-                <xsl:element name ="Quote-Generation-Service"><xsl:text>vsock:2:4050</xsl:text></xsl:element>
-            </xsl:element>
             <xsl:element name ="qemu:commandline" >
                 <xsl:element name ="qemu:arg">
                     <xsl:attribute name="value">
@@ -57,6 +50,26 @@
                 <xsl:element name ="qemu:arg">
                      <xsl:attribute name="value">
                         <xsl:value-of select="'host,-kvm-steal-time'"/>
+                    </xsl:attribute>
+                </xsl:element>
+                <xsl:element name ="qemu:arg">
+                    <xsl:attribute name="value">
+                        <xsl:value-of select="'-machine'"/>
+                    </xsl:attribute>
+                </xsl:element>
+                <xsl:element name ="qemu:arg">
+                    <xsl:attribute name="value">
+                        <xsl:value-of select="'q35,kernel_irqchip=split,confidential-guest-support=tdx,hpet=off'"/>
+                    </xsl:attribute>
+                </xsl:element>
+                <xsl:element name ="qemu:arg">
+                    <xsl:attribute name="value">
+                        <xsl:value-of select="'-object'"/>
+                    </xsl:attribute>
+                </xsl:element>
+                <xsl:element name ="qemu:arg">
+                    <xsl:attribute name="value">
+                        <xsl:value-of select="'{&quot;qom-type&quot;:&quot;tdx-guest&quot;,&quot;id&quot;:&quot;tdx&quot;,&quot;quote-generation-socket&quot;:{&quot;type&quot;:&quot;vsock&quot;,&quot;cid&quot;:&quot;1&quot;,&quot;port&quot;:&quot;4050&quot;}}'"/>
                     </xsl:attribute>
                 </xsl:element>
             </xsl:element>
@@ -84,8 +97,14 @@
     </xsl:template>
     <xsl:template match="/domain/devices/console">
         <console type="pty">
-            <target type="virtio" port="1" />
+            <target type="serial" port="0" />
       </console>
+    </xsl:template>
+    <xsl:template match ="/domain/devices/serial">
+        <serial type='file'>
+            <source path='/var/log/libvirt/qemu/test_constell.log'/>
+            <target port='0'/>
+        </serial>
     </xsl:template>
     <xsl:template match="/domain/devices/graphics"></xsl:template>
     <xsl:template match="/domain/devices/rng"></xsl:template>

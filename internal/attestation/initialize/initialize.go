@@ -13,9 +13,9 @@ import (
 	"errors"
 	"io"
 
+	tdxapi "github.com/Ruoyu-y/go-tdx-qpl/tdx"
 	"github.com/edgelesssys/constellation/v2/internal/attestation/measurements"
 	"github.com/edgelesssys/constellation/v2/internal/attestation/tdx"
-	tdxapi "github.com/edgelesssys/go-tdx-qpl/tdx"
 	"github.com/google/go-tpm/legacy/tpm2"
 )
 
@@ -57,7 +57,11 @@ func IsNodeBootstrapped(openDevice func() (io.ReadWriteCloser, error)) (bool, er
 }
 
 func tdxIsNodeBootstrapped(handle tdx.Device) (bool, error) {
-	tdMeasure, err := tdxapi.ReadMeasurements(handle)
+	tdxVersion := tdx.GetDeviceVersion()
+	if tdxVersion == "" {
+		return false, errors.New("Device Version not found")
+	}
+	tdMeasure, err := tdxapi.ReadMeasurements(handle, tdxVersion)
 	if err != nil {
 		return false, err
 	}
@@ -117,7 +121,9 @@ func tpmIsNodeBootstrapped(tpm io.ReadWriteCloser) (bool, error) {
 }
 
 func tdxMarkNodeAsBootstrapped(handle tdx.Device, clusterID []byte) error {
-	return tdxapi.ExtendRTMR(handle, clusterID, measurements.RTMRIndexClusterID)
+	//comment for now as extend RTMR is currently not supported in upstream kernel
+	//return tdxapi.ExtendRTMR(handle, clusterID, measurements.RTMRIndexClusterID)
+	return nil
 }
 
 func tpmMarkNodeAsBootstrapped(tpm io.ReadWriteCloser, clusterID []byte) error {

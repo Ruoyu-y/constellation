@@ -1409,12 +1409,12 @@ def go_dependencies():
         version = "v0.0.0-20240513062303-05f8770a633d",
     )
     go_repository(
-        name = "com_github_edgelesssys_go_tdx_qpl",
+        name = "com_github_Ruoyu-y_go_tdx_qpl",
         build_file_generation = "on",
         build_file_proto_mode = "disable_global",
-        importpath = "github.com/edgelesssys/go-tdx-qpl",
-        sum = "h1:TCGUmmH50cQBGXPJsn32APf93fmWQXcSMi7pMbDPtV0=",
-        version = "v0.0.0-20240123150912-dcad3c41ec5f",
+        importpath = "github.com/Ruoyu-y/go-tdx-qpl",
+        sum = "h1:V20ZcC5Hz/84OJovLSm0J+uAfS2TuEvJG/UIgYRk76k=",
+        version = "v0.0.0-20240730013531-9e0d36f055d8",
     )
     go_repository(
         name = "com_github_eggsampler_acme_v3",
@@ -7236,3 +7236,29 @@ def go_dependencies():
         sum = "h1:Ci3iUJyx9UeRx7CeFN8ARgGbkESwJK+KB9lLcWxY/Zw=",
         version = "v2.4.0",
     )
+    go_repository(
+        name = "cc_api_cc_trusted_vmsdk",
+        build_file_generation = "on",
+        build_file_proto_mode = "disable_global",
+        importpath = "github.com/cc-api/cc-trusted-vmsdk/src/golang/cctrusted_vm",
+        sum = "h1:CYPI9/gwWzxn8ywlEPzEZqwYv8yZArGpJAkgsnHXRr8=",
+        version = "v0.0.0-20240730011201-862206e5bd59",
+    )
+    go_repository(
+        name = "com_github_cc_api_evidence_api_common_golang_evidence_api",
+        build_file_generation = "on",
+        build_file_proto_mode = "disable_global",
+        importpath = "github.com/cc-api/evidence-api/common/golang/evidence_api",
+        sum = "h1:IjmvJTssPaDuC/qkSDaLFv6u+9MFFH+nmTr4Duj6KhM=",
+        version = "v0.0.0-20240729064808-21e12aa810c8",
+    )
+    go_repository(
+        name = "com_github_mdlayher_vsock",
+        build_file_generation = "on",
+        build_file_proto_mode = "disable_global",
+        importpath = "github.com/mdlayher/vsock",
+        sum = "h1:pC1mTJTvjo1r9n9fbm7S1j04rCgCzhCOS5DY0zqHlnQ=",
+        version = "v1.2.1",
+    )
+
+

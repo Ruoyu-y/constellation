@@ -12,9 +12,11 @@ import (
 	"io"
 	"os"
 
+	"github.com/Ruoyu-y/go-tdx-qpl/tdx"
 	"github.com/edgelesssys/constellation/v2/internal/attestation/measurements"
-	"github.com/edgelesssys/go-tdx-qpl/tdx"
 )
+
+var deviceVersion string
 
 type tdxAttestationDocument struct {
 	// RawQuote is the raw TDX quote.
@@ -46,7 +48,7 @@ func GetSelectedMeasurements(open OpenFunc, selection []int) (measurements.M, er
 	}
 	defer handle.Close()
 
-	tdxMeasurements, err := tdx.ReadMeasurements(handle)
+	tdxMeasurements, err := tdx.ReadMeasurements(handle, deviceVersion)
 	if err != nil {
 		return nil, err
 	}
@@ -73,12 +75,25 @@ func Available() bool {
 
 // Open opens the TDX guest device.
 func Open() (Device, error) {
-	handle, err := os.Open(tdx.GuestDevice)
+	deviceVersion = tdx.TdxVersion10
+	handle, err := os.Open(tdx.GuestDevice_1_0)
 	if err != nil {
-		return nil, err
+		handle, err = os.Open(tdx.GuestDevice_1_5)
+		if err != nil {
+			deviceVersion = ""
+			return nil, err
+		}
+		deviceVersion = tdx.TdxVersion15
 	}
 
 	return handle, nil
+}
+
+func GetDeviceVersion() string {
+	if deviceVersion != "" {
+		return deviceVersion
+	}
+	return ""
 }
 
 // IsTDXDevice checks if the given device is a TDX guest device.
@@ -91,5 +106,5 @@ func IsTDXDevice(device io.ReadWriteCloser) (Device, bool) {
 	if !ok {
 		return nil, false
 	}
-	return handle, f.Name() == tdx.GuestDevice
+	return handle, f.Name() == tdx.GuestDevice_1_0 || f.Name() == tdx.GuestDevice_1_5
 }

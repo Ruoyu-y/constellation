@@ -399,6 +399,7 @@ func Default() *Config {
 			GCPSEVES:           &GCPSEVES{Measurements: measurements.DefaultsFor(cloudprovider.GCP, variant.GCPSEVES{})},
 			GCPSEVSNP:          DefaultForGCPSEVSNP(),
 			QEMUVTPM:           &QEMUVTPM{Measurements: measurements.DefaultsFor(cloudprovider.QEMU, variant.QEMUVTPM{})},
+			QEMUTDX:            &QEMUTDX{Measurements: measurements.DefaultsFor(cloudprovider.QEMU, variant.QEMUTDX{})},
 		},
 	}
 }
@@ -591,6 +592,8 @@ func (c *Config) SetAttestation(attestation variant.Variant) {
 		c.Attestation = AttestationConfig{GCPSEVSNP: currentAttestationConfigs.GCPSEVSNP}
 	case variant.QEMUVTPM:
 		c.Attestation = AttestationConfig{QEMUVTPM: currentAttestationConfigs.QEMUVTPM}
+	case variant.QEMUTDX:
+		c.Attestation = AttestationConfig{QEMUTDX: currentAttestationConfigs.QEMUTDX}
 	}
 }
 
@@ -661,6 +664,9 @@ func (c *Config) GetAttestationConfig() AttestationCfg {
 	}
 	if c.Attestation.QEMUVTPM != nil {
 		return c.Attestation.QEMUVTPM
+	}
+	if c.Attestation.QEMUTDX != nil {
+		return c.Attestation.QEMUTDX
 	}
 	return &DummyCfg{}
 }
